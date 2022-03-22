@@ -29,9 +29,9 @@ If you don't already have tox installed, you can install it with:
 If you only want to run part of the test suite, you can also use pytest
 directly with::
     pip install -e .[test]
-    pytest --pyargs pycraf_gui --do-gui-tests --remote-data=any
+    pytest --pyargs pycraf_gui --dogui
     # or individual tests:
-    pytest --pyargs pycraf_gui --do-gui-tests --remote-data=any -k <test_func_name/module_name/etc.>
+    pytest --pyargs pycraf_gui --dogui -k <test_func_name/module_name/etc.>
 
 For more information, see:
   https://docs.astropy.org/en/latest/development/testguide.html#running-tests

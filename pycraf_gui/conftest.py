@@ -78,7 +78,9 @@ except NameError:   # Needed to support Astropy <= 1.0.0
 import pytest
 from pycraf import pathprof
 
-
+# this only works if pytest is started in project directory and not
+# with --pyargs pycraf_gui from anywhere else :-(
+# see also https://github.com/pytest-dev/pytest/issues/1596
 def pytest_addoption(parser):
     parser.addoption(
         '--dogui', action='store_true', default=False,
@@ -110,9 +112,22 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(scope='session')
-def srtm_temp_dir(tmpdir_factory):
+def srtm_temp_dir(tmpdir_factory, create_mock_data=True):
 
     tdir = tmpdir_factory.mktemp('srtmdata')
+
+    if create_mock_data:
+        import numpy as np
+        from astropy.utils.misc import NumpyRNGContext
+
+        with NumpyRNGContext(0):
+            tile = np.int16(np.random.normal(200, 50, (1201, 1201)))
+            hgt_file = tdir / "N50E006.hgt"
+            np.ascontiguousarray(tile, dtype='>i2').tofile(hgt_file)
+            tile = np.int16(np.random.normal(200, 50, (1201, 1201)))
+            hgt_file = tdir / "N50E005.hgt"
+            np.ascontiguousarray(tile, dtype='>i2').tofile(hgt_file)
+
     return str(tdir)
 
 
@@ -122,8 +137,7 @@ def srtm_handler(srtm_temp_dir):
 
     with pathprof.srtm.SrtmConf.set(
             srtm_dir=srtm_temp_dir,
-            server='viewpano',
-            download='missing',
+            download='never',
             interp='linear',
             ):
 
