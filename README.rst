@@ -1,19 +1,19 @@
-******
-pycraf
-******
+**********
+pycraf-gui
+**********
 
 - *Version:* 2.0.0
 - *Authors:* Benjamin Winkel, Marta Bautista, Federico Di Vruno,
   Gyula I. G. Józsa
-- *User manual:* `stable <https://bwinkel.github.io/pycraf/>`__ |
-  `developer <https://bwinkel.github.io/pycraf/latest/>`__
+- *User manual:* `stable <https://bwinkel.github.io/pycraf/gui/>`__ |
+  `developer <https://bwinkel.github.io/pycraf/latest/gui/>`__
 
-.. image:: https://img.shields.io/pypi/v/pycraf.svg
-    :target: https://pypi.python.org/pypi/pycraf
+.. image:: https://img.shields.io/pypi/v/pycraf-gui.svg
+    :target: https://pypi.python.org/pypi/pycraf-gui
     :alt: PyPI tag
 
 .. image:: https://img.shields.io/badge/license-GPL-blue.svg
-    :target: https://www.github.com/bwinkel/pycraf/blob/master/COPYING
+    :target: https://www.github.com/bwinkel/pycraf-gui/blob/master/COPYING
     :alt: License
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.1244192.svg
@@ -23,7 +23,9 @@ pycraf
 The pycraf Python package provides functions and procedures for
 various tasks in spectrum-management compatibility studies. A typical example
 would be to calculate the interference levels at a radio telescope produced
-from a radio broadcasting tower.
+from a radio broadcasting tower. This package, `pycraf-gui` contains a
+simple graphical user interface, which can be used to do path attenuation
+calculations.
 
 Releases are `registered on PyPI <http://pypi.python.org/pypi/pycraf>`_,
 and development is occurring at the
@@ -32,58 +34,28 @@ and development is occurring at the
 Project Status
 ==============
 
-.. image:: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_apis/build/status/bwinkel.pycraf?repoName=bwinkel%2Fpycraf&branchName=master
-    :target: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_build?definitionId=2
+.. image:: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_apis/build/status/bwinkel.pycraf-gui?repoName=bwinkel%2Fpycraf-gui&branchName=master
+    :target: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_build?definitionId=4
     :alt: Pycrafs's CI Status on Azure Pipelines
 
 
-Features
-========
-
-- Full implementation of `ITU-R Rec. P.452-16 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_ that allows to calculate path
-  attenuation for the distance between interferer and victim service. Supports
-  to load NASA's `Shuttle Radar Topography Mission (SRTM) <https://www2.jpl.nasa.gov/srtm/>`_ data for height-profile generation.
-- Full implementation of `ITU-R Rec. P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, which provides two atmospheric
-  models to calculate the attenuation for paths through Earth's atmosphere.
-- Provides various antenna patterns necessary for compatibility studies (e.g.,
-  RAS, IMT, fixed-service links).
-- Functions to convert power flux densities, field strengths, transmitted and
-  received powers at certain distances and frequencies into each other.
 
 Usage
 =====
 
-Examples and Documentation
---------------------------
+Starting pycraf-gui
+-------------------
 
-We provide `an online documentation and API reference <https://bwinkel.github.io/pycraf/>`_. Furthermore, you can find tutorials and HowTos in
-the `notebooks <http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/>`_
-directory on the pycraf repository.
+After installation, you can run::
 
-Testing
--------
-
-After installation (see below) you can test, if everything works as intended::
-
-    import pycraf
-
-    pycraf.test()
-
-By default, the `test` function will skip over tests that require
-data from the internet. One can include them by::
-
-    pycraf.test(remote_data='any')
-
-This will *always* download SRTM data (few tiles only) to test the
-auto-download functionality! Do this only, if you can afford the network
-traffic.
+  pycraf-gui
 
 
 License
 =======
 
-Several licenses apply; see the `license directory <https://github.com/bwinkel/pycraf/blob/master/licenses/>`_ in the repository. The pycraf Python package
-itself is published under `GPL v3 <https://github.com/bwinkel/pycraf/blob/master/licenses/COPYING>`_, an open-source license.
+Several licenses apply; see the `license directory <https://github.com/bwinkel/pycraf/blob/master/licenses/>`_ in the `pycraf <https://github.com/bwinkel/pycraf>`_ repository. The pycraf and pycraf-gui Python packages
+itself are published under `GPL v3 <https://github.com/bwinkel/pycraf/blob/master/licenses/COPYING>`_, an open-source license.
 
 For some of the functionality provided in pycraf, data files provided by the
 ITU are necessary. For example, the atmospheric model in the *pycraf.atm*
@@ -114,45 +86,21 @@ We strongly recommend to use the `Anaconda Python distribution
 binaries for all major platforms (Linux, OSX, Windows). After installing
 Anaconda/Miniconda, one can use the `conda` package manager to install it::
 
-    conda install pycraf -c conda-forge
+    conda install pycraf pycraf-gui -c conda-forge
 
 Of course, it is always a good idea to do this in its own environment, such
 that you don't mess up with your standard environment, e.g.::
 
-    conda create -n pycraf-env python=3.9 pycraf
+    conda create -n pycraf-env python=3.9 pycraf pycraf-gui
 
 If you don't like Anaconda, the easiest way to install pycraf is via pip::
 
-    pip install pycraf
+    pip install pycraf pycraf-gui
 
 The installation is also possible from source. Download the tar.gz-file,
 extract (or clone from GitHub) and simply execute::
 
     python -m pip install .
-
-Dependencies
-------------
-
-We kept the dependencies as minimal as possible. The following packages are
-required:
-
-* Python 3.8 or later
-* setuptools
-* cython 0.29 or later
-* numpy 1.18 or later
-* astropy 4.0 or later
-* scipy 1.7 or later
-* pytest 5.4 or later
-* pytest-remotedata 0.3.3 or later
-
-The following packages are optional, and you will need them for certain
-features and to build the docs:
-
-* h5py 3.3 or later; for caching
-* matplotlib 3.4 or later; for some plot helpers
-* pyproj 2.6 or later; for the `geospatial` subpackage
-* sgp4 2.0 or later; for the `satellite` subpackage
-* rasterio 1.2 or later; for the `satellite` subpackage
 
 For further details, we refer to the online documention `installation
 instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also
