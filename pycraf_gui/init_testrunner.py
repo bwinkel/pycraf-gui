@@ -6,8 +6,20 @@ import os
 try:
 
     # Create the test function for self test
-    from astropy.tests.runner import TestRunner
-    test = TestRunner.make_test_runner_in(os.path.dirname(__file__))
+    from astropy.tests.runner import TestRunner, keyword
+
+    class MyRunner(TestRunner):
+
+        @keyword(False)
+        def dogui(self, opt, kwargs):
+            """
+            dogui : `bool`
+                The parameter description for the run_tests docstring.
+            """
+            # Return value must be a list with a CLI parameter for pytest.
+            return ['--dogui'] if opt else ['']
+
+    test = MyRunner.make_test_runner_in(os.path.dirname(__file__))
 
 except ImportError:
 

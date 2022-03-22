@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'main_form.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -21,7 +23,6 @@ class Ui_MainWindow(object):
         self.geometryTab = QtWidgets.QWidget()
         self.geometryTab.setObjectName("geometryTab")
         self.gridLayout_13 = QtWidgets.QGridLayout(self.geometryTab)
-        self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_13.setObjectName("gridLayout_13")
         self.geometryVerticalLayout = QtWidgets.QVBoxLayout()
         self.geometryVerticalLayout.setObjectName("geometryVerticalLayout")
@@ -44,7 +45,6 @@ class Ui_MainWindow(object):
         self.statisticsTab = QtWidgets.QWidget()
         self.statisticsTab.setObjectName("statisticsTab")
         self.gridLayout_17 = QtWidgets.QGridLayout(self.statisticsTab)
-        self.gridLayout_17.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_17.setObjectName("gridLayout_17")
         self.statisticsVerticalLayout = QtWidgets.QVBoxLayout()
         self.statisticsVerticalLayout.setObjectName("statisticsVerticalLayout")
@@ -53,7 +53,6 @@ class Ui_MainWindow(object):
         self.pathprofileTab = QtWidgets.QWidget()
         self.pathprofileTab.setObjectName("pathprofileTab")
         self.gridLayout_9 = QtWidgets.QGridLayout(self.pathprofileTab)
-        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_9.setObjectName("gridLayout_9")
         self.pathprofVerticalLayout = QtWidgets.QVBoxLayout()
         self.pathprofVerticalLayout.setObjectName("pathprofVerticalLayout")
@@ -62,7 +61,6 @@ class Ui_MainWindow(object):
         self.mapTab = QtWidgets.QWidget()
         self.mapTab.setObjectName("mapTab")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.mapTab)
-        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_10.setObjectName("gridLayout_10")
         self.mapVerticalLayout = QtWidgets.QVBoxLayout()
         self.mapVerticalLayout.setObjectName("mapVerticalLayout")
@@ -84,7 +82,6 @@ class Ui_MainWindow(object):
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.dockWidgetContents)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.scrollArea = QtWidgets.QScrollArea(self.dockWidgetContents)
         self.scrollArea.setWidgetResizable(True)
@@ -93,7 +90,6 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -191, 238, 542))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
@@ -280,7 +276,6 @@ class Ui_MainWindow(object):
         self.dockWidgetContents_2 = QtWidgets.QWidget()
         self.dockWidgetContents_2.setObjectName("dockWidgetContents_2")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.dockWidgetContents_2)
-        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.scrollArea_2 = QtWidgets.QScrollArea(self.dockWidgetContents_2)
         self.scrollArea_2.setWidgetResizable(True)
@@ -289,7 +284,6 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, -22, 222, 132))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
-        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -332,7 +326,6 @@ class Ui_MainWindow(object):
         self.dockWidgetContents_3 = QtWidgets.QWidget()
         self.dockWidgetContents_3.setObjectName("dockWidgetContents_3")
         self.gridLayout_11 = QtWidgets.QGridLayout(self.dockWidgetContents_3)
-        self.gridLayout_11.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_11.setObjectName("gridLayout_11")
         self.scrollArea_3 = QtWidgets.QScrollArea(self.dockWidgetContents_3)
         self.scrollArea_3.setWidgetResizable(True)
@@ -341,7 +334,6 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, -81, 222, 163))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_12 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
-        self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_12.setObjectName("gridLayout_12")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -412,7 +404,6 @@ class Ui_MainWindow(object):
         self.dockWidgetContents_4 = QtWidgets.QWidget()
         self.dockWidgetContents_4.setObjectName("dockWidgetContents_4")
         self.gridLayout_14 = QtWidgets.QGridLayout(self.dockWidgetContents_4)
-        self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_14.setObjectName("gridLayout_14")
         self.scrollArea_4 = QtWidgets.QScrollArea(self.dockWidgetContents_4)
         self.scrollArea_4.setWidgetResizable(True)
@@ -421,7 +412,6 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 238, 205))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_15 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
-        self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.groupBox_4 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_4)
         self.groupBox_4.setObjectName("groupBox_4")
@@ -564,5 +554,4 @@ class Ui_MainWindow(object):
         self.srtmServerComboBox.setItemText(1, _translate("MainWindow", "NASA v2.1"))
         self.srtmServerComboBox.setItemText(2, _translate("MainWindow", "Viewfinder panoramas"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
-
-from pycraf.gui.resources import resources_rc
+from pycraf_gui.gui.resources import resources_rc

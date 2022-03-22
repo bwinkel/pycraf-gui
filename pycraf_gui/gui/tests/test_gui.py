@@ -42,7 +42,7 @@ LABEL_TEXT = '''
     }
     .lalign { text-align: left; padding-left: 12px;}
     .ralign { text-align: right; padding-right: 12px; }
-    </style>
+</style>
 
 <table>
   <thead>
@@ -59,7 +59,7 @@ LABEL_TEXT = '''
       <td class="lalign">alpha_tr</td>
       <td class="ralign"> 122.081 deg</td>
       <td class="lalign">L_b0p (LoS)</td>
-      <td class="ralign">125.0 dB</td>
+      <td class="ralign">127.3 dB</td>
     </tr>
     <tr>
       <td class="lalign">a_e (beta0)</td>
@@ -67,30 +67,30 @@ LABEL_TEXT = '''
       <td class="lalign">alpha_rt</td>
       <td class="ralign"> -57.390 deg</td>
       <td class="lalign">L_bd (Diffraction)</td>
-      <td class="ralign">172.4 dB</td>
+      <td class="ralign">182.6 dB</td>
     </tr>
     <tr>
       <td class="lalign">beta0</td>
       <td class="ralign">1.25 %</td>
       <td class="lalign">eps_pt</td>
-      <td class="ralign">   0.512 deg</td>
+      <td class="ralign">   1.537 deg</td>
       <td class="lalign">L_bs (Troposcatter)</td>
-      <td class="ralign">207.4 dB</td>
+      <td class="ralign">251.0 dB</td>
     </tr>
     <tr>
       <td class="lalign">N0</td>
       <td class="ralign">324.7</td>
       <td class="lalign">eps_pr</td>
-      <td class="ralign">   3.458 deg</td>
+      <td class="ralign">   6.793 deg</td>
       <td class="lalign">L_ba (Anomalous)</td>
-      <td class="ralign">219.8 dB</td>
+      <td class="ralign">220.2 dB</td>
     </tr>
     <tr>
       <td class="lalign">Delta N</td>
       <td class="ralign">38.69 1 / km</td>
       <td class="lalign">h_eff</td>
-      <td class="ralign">   510.0 m</td>
-      <td class="lalign">L_b (Total)</td><td class="ralign">172.4 dB</td>
+      <td class="ralign">  1399.2 m</td>
+      <td class="lalign">L_b (Total)</td><td class="ralign">182.6 dB</td>
     </tr>
     <tr>
       <td class="lalign"></td>
@@ -98,7 +98,7 @@ LABEL_TEXT = '''
       <td class="lalign">Path type</td>
       <td class="ralign">Trans-horizon</td>
       <td class="lalign" style="color: blue;">L_b_corr (Total + Clutter)</td>
-      <td class="ralign" style="color: blue;">171.8 dB</td>
+      <td class="ralign" style="color: blue;">181.9 dB</td>
     </tr>
   </tbody>
 </table>
@@ -122,15 +122,12 @@ def _set_parameters(ui):
     ui.mapSizeLatDoubleSpinBox.setValue(0.2)
     ui.mapResolutionDoubleSpinBox.setValue(3.0)
 
-# do a minimal test involving srtm data, as the download may take longer
-# than the gui timers
-
-@pytest.mark.remote_data
+# do a minimal test involving srtm data for reference
 @pytest.mark.usefixtures('srtm_handler')
 def test_srtm_height_data_linear():
 
     lons, lats = np.meshgrid(
-        np.arange(12.1005, 12.9, 0.2),
+        np.arange(6.1005, 6.9, 0.2),
         np.arange(50.1005, 50.9, 0.2)
         )
     heights = pathprof.srtm_height_data(
@@ -138,15 +135,14 @@ def test_srtm_height_data_linear():
         ).reshape(lons.shape)
 
     assert_quantity_allclose(heights, np.array([
-        [581.71997070, 484.48001099, 463.79998779, 736.44000244],
-        [613.00000000, 549.88000488, 636.52001953, 678.91998291],
-        [433.44000244, 416.20001221, 704.52001953, 826.08001709],
-        [358.72000122, 395.55999756, 263.83999634, 469.39999390]
-        ]) * apu.m)
+      [167.48, 217.64, 187.08, 191.20],
+      [195.52, 241.20, 199.52, 214.60],
+      [179.16, 252.48, 168.00, 161.40],
+      [221.24, 181.20, 170.28, 203.32],
+      ]) * apu.m)
 
 
-@pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
+@pytest.mark.gui
 @pytest.mark.usefixtures('srtm_handler')
 def test_gui_startup_shows_pathgeometry(qtbot):
     # change download option to missing and test, if the results label
@@ -157,7 +153,7 @@ def test_gui_startup_shows_pathgeometry(qtbot):
     qtbot.addWidget(myapp)
     _set_parameters(myapp.ui)
     myapp.ui.srtmDownloadComboBox.setCurrentIndex(
-        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        gui.SRTM_DOWNLOAD_MAPPING.index('never')
         )
     with qtbot.waitSignal(
             myapp.my_geo_worker.result_ready[object, object],
@@ -166,11 +162,11 @@ def test_gui_startup_shows_pathgeometry(qtbot):
         myapp.timer.start(10)
 
     ltxt = myapp.ui.ppRichTextLabel.text()
+    print(ltxt)
     assert re.sub("\\s*", " ", ltxt) == re.sub("\\s*", " ", LABEL_TEXT)
 
 
-@pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
+@pytest.mark.gui
 @pytest.mark.usefixtures('srtm_handler')
 def test_stats_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -179,7 +175,7 @@ def test_stats_worker(qtbot):
     qtbot.addWidget(myapp)
     _set_parameters(myapp.ui)
     myapp.ui.srtmDownloadComboBox.setCurrentIndex(
-        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        gui.SRTM_DOWNLOAD_MAPPING.index('never')
         )
     with qtbot.waitSignal(
             myapp.my_stats_worker.result_ready[object, object],
@@ -191,21 +187,20 @@ def test_stats_worker(qtbot):
 
     assert_quantity_allclose(
         res['L_b'][:, ::20].to(cnv.dB).value, [
-            [138.8771118, 140.8853131, 142.8934803, 144.9016341, 147.7434509],
-            [156.2189124, 158.2270703, 160.2352217, 162.2433706, 164.7989202],
-            [165.3765899, 167.3847525, 169.3929057, 171.4010551, 173.6622298],
-            [174.5007580, 176.5089330, 178.5170906, 180.5252413, 182.7685164],
-            [186.5540705, 188.5623023, 190.5704806, 192.5786379, 194.8213818],
-            [195.9055898, 197.9140057, 199.9222511, 201.9304294, 204.1729092],
-            [210.4921391, 212.5046189, 214.5143471, 216.5229899, 218.7653956],
-            [236.8190545, 238.8738936, 240.8993047, 242.9128866, 245.1563437],
-            [243.0043903, 247.2872525, 251.7308653, 256.0069129, 259.5560927],
+            [154.2717482, 154.7008784, 155.1300085, 155.5591386, 156.6658793],
+            [168.1726196, 171.3723174, 172.7435381, 173.1726683, 173.9579308],
+            [181.0480631, 181.4771933, 181.9063234, 182.3354535, 182.8716378],
+            [190.1585426, 190.5876727, 191.0168029, 191.4459330, 191.9820030],
+            [202.1996918, 202.6288219, 203.0579521, 203.4870822, 204.0230525],
+            [211.5453782, 211.9745084, 212.4036385, 212.8327686, 213.3686897],
+            [226.1338265, 226.5629566, 226.9920868, 227.4212169, 227.9571040],
+            [252.5214973, 252.9506276, 253.3797578, 253.8088879, 254.3447456],
+            [267.3074414, 267.7368170, 268.1659884, 268.5951245, 269.1309685],
             ])
     # assert myapp.pathprof_results is None
 
 
-@pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
+@pytest.mark.gui
 @pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -214,7 +209,7 @@ def test_pp_worker(qtbot):
     qtbot.addWidget(myapp)
     _set_parameters(myapp.ui)
     myapp.ui.srtmDownloadComboBox.setCurrentIndex(
-        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        gui.SRTM_DOWNLOAD_MAPPING.index('never')
         )
     with qtbot.waitSignal(
             myapp.my_pp_worker.result_ready[object, object],
@@ -226,18 +221,18 @@ def test_pp_worker(qtbot):
 
     assert_quantity_allclose(
         res['L_b'][::1000].to(cnv.dB).value,
-        [0., 128.879956, 163.285657, 155.078537, 156.097511, 170.742422]
+        [0., 157.972929, 172.52172, 180.40373, 184.086423, 181.1237212]
         )
     assert_quantity_allclose(
         res['eps_pt'][::1000].to(apu.deg).value,
-        [0., 0.45954562, 0.51161058, 0.51158408, 0.51155677, 0.51152865]
+        [0., 1.536944, 1.536942, 1.53694, 1.536938, 1.536936],
+        atol=1e-6, rtol=1e-6
         )
     assert_equal(res['path_type'][::1000], [0, 1, 1, 1, 1, 1])
     # assert myapp.pathprof_results is None
 
 
-@pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
+@pytest.mark.gui
 @pytest.mark.usefixtures('srtm_handler')
 def test_map_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -246,7 +241,7 @@ def test_map_worker(qtbot):
     qtbot.addWidget(myapp)
     _set_parameters(myapp.ui)
     myapp.ui.srtmDownloadComboBox.setCurrentIndex(
-        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        gui.SRTM_DOWNLOAD_MAPPING.index('never')
         )
     with qtbot.waitSignal(
             myapp.my_map_worker.result_ready[object, object],
@@ -258,24 +253,25 @@ def test_map_worker(qtbot):
 
     print(res['L_b'][::80, ::80].to(cnv.dB).value)
     print(res['eps_pt'][::80, ::80].to(apu.deg).value)
+    print(res['path_type'][::80, ::80])
     assert_quantity_allclose(
         res['L_b'][::80, ::80].to(cnv.dB).value, [
-            [147.92110506, 133.64246369, 111.43421362, 134.20808414],
-            [111.45317964, 126.50588342, 127.41079286, 119.47281152],
-            [118.95606625, 105.44468519, 126.89590692, 119.33537173],
-            [113.64151601, 125.3059271, 116.06473428, 136.72188462],
+            [163.31770261, 165.22676741, 131.12436506, 174.48122428],
+            [167.62530535, 151.35816148, 159.98972068, 170.32689950],
+            [149.65770949, 158.09945172, 157.58625982, 152.91956091],
+            [173.62306704, 165.38626174, 162.34733462, 170.04263257],
             ])
     assert_quantity_allclose(
         res['eps_pt'][::80, ::80].to(apu.deg).value, [
-            [0.27265693, 0.20522323, 0.6505462, 0.64897268],
-            [-0.06723739, 0.03969113, 0.44085012, 0.30607933],
-            [-0.37428988, -0.58972059, -0.46088839, -0.62473188],
-            [-0.37882374, -0.49772378, -0.62911416, -0.46750982],
+            [1.81177833, 1.71394821, 0.33816931, 1.39554158],
+            [0.55507680, 1.97696811, 1.61839769, 5.14500455],
+            [4.14323932, 1.65557532, 3.54791246, 2.23291487],
+            [1.56320178, 2.15972181, 0.81075965, 3.29290329],
             ])
     assert_equal(res['path_type'][::80, ::80], [
-        [1, 1, 0, 1],
-        [0, 1, 1, 0],
-        [0, 0, 1, 0],
-        [0, 1, 0, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
         ])
     # assert myapp.pathprof_results is None

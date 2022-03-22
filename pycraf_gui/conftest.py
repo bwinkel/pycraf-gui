@@ -78,22 +78,56 @@ except NameError:   # Needed to support Astropy <= 1.0.0
 import pytest
 from pycraf import pathprof
 
-
+# this only works if pytest is started in project directory and not
+# with --pyargs pycraf_gui from anywhere else :-(
+# see also https://github.com/pytest-dev/pytest/issues/1596
 def pytest_addoption(parser):
     parser.addoption(
-        '--do-gui-tests', action='store_true', help='Do GUI tests.'
+        '--dogui', action='store_true', default=False,
+        help='Do GUI tests.'
         )
 
 
-def pytest_runtest_setup(item):
-    if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
-        pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
+def pytest_configure(config):
+    config.addinivalue_line("markers", "gui: mark as gui test")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--dogui"):
+        # do-gui-tests given in cli: do gui tests
+        return
+    skip_gui = pytest.mark.skip(reason="need --dogui option to run")
+    for item in items:
+        if "gui" in item.keywords:
+            item.add_marker(skip_gui)
+
+# @pytest.fixture
+# def do_gui_tests(request):
+#     return request.config.getoption("--do-gui-tests")
+
+
+# def pytest_runtest_setup(item):
+#     if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
+#         pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
 
 
 @pytest.fixture(scope='session')
-def srtm_temp_dir(tmpdir_factory):
+def srtm_temp_dir(tmpdir_factory, create_mock_data=True):
 
     tdir = tmpdir_factory.mktemp('srtmdata')
+
+    if create_mock_data:
+        import numpy as np
+        from astropy.utils.misc import NumpyRNGContext
+
+        with NumpyRNGContext(0):
+            tile = np.int16(np.random.normal(200, 50, (1201, 1201)))
+            hgt_file = tdir / "N50E006.hgt"
+            np.ascontiguousarray(tile, dtype='>i2').tofile(hgt_file)
+            tile = np.int16(np.random.normal(200, 50, (1201, 1201)))
+            hgt_file = tdir / "N50E005.hgt"
+            np.ascontiguousarray(tile, dtype='>i2').tofile(hgt_file)
+
     return str(tdir)
 
 
@@ -103,8 +137,8 @@ def srtm_handler(srtm_temp_dir):
 
     with pathprof.srtm.SrtmConf.set(
             srtm_dir=srtm_temp_dir,
-            server='viewpano',
-            download='missing',
+            download='never',
+            interp='linear',
             ):
 
         yield
