@@ -81,13 +81,32 @@ from pycraf import pathprof
 
 def pytest_addoption(parser):
     parser.addoption(
-        '--do-gui-tests', action='store_true', help='Do GUI tests.'
+        '--dogui', action='store_true', default=False,
+        help='Do GUI tests.'
         )
 
 
-def pytest_runtest_setup(item):
-    if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
-        pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
+def pytest_configure(config):
+    config.addinivalue_line("markers", "gui: mark as gui test")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--dogui"):
+        # do-gui-tests given in cli: do gui tests
+        return
+    skip_gui = pytest.mark.skip(reason="need --dogui option to run")
+    for item in items:
+        if "gui" in item.keywords:
+            item.add_marker(skip_gui)
+
+# @pytest.fixture
+# def do_gui_tests(request):
+#     return request.config.getoption("--do-gui-tests")
+
+
+# def pytest_runtest_setup(item):
+#     if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
+#         pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
 
 
 @pytest.fixture(scope='session')
@@ -105,6 +124,7 @@ def srtm_handler(srtm_temp_dir):
             srtm_dir=srtm_temp_dir,
             server='viewpano',
             download='missing',
+            interp='linear',
             ):
 
         yield

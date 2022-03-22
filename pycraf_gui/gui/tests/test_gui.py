@@ -145,8 +145,8 @@ def test_srtm_height_data_linear():
         ]) * apu.m)
 
 
+@pytest.mark.gui
 @pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_gui_startup_shows_pathgeometry(qtbot):
     # change download option to missing and test, if the results label
@@ -169,8 +169,8 @@ def test_gui_startup_shows_pathgeometry(qtbot):
     assert re.sub("\\s*", " ", ltxt) == re.sub("\\s*", " ", LABEL_TEXT)
 
 
+@pytest.mark.gui
 @pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_stats_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -204,8 +204,8 @@ def test_stats_worker(qtbot):
     # assert myapp.pathprof_results is None
 
 
+@pytest.mark.gui
 @pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -236,8 +236,8 @@ def test_pp_worker(qtbot):
     # assert myapp.pathprof_results is None
 
 
+@pytest.mark.gui
 @pytest.mark.remote_data
-# @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_map_worker(qtbot):
     # change download option to missing and test, if the results are correct
