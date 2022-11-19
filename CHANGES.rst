@@ -1,3 +1,7 @@
+2.0.1 (2022-11-20)
+=======================
+This is a maintenance release. No new features have been added.
+
 2.0.0 (2022-03-21)
 =======================
 

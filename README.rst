@@ -2,7 +2,7 @@
 pycraf-gui
 **********
 
-- *Version:* 2.0.0
+- *Version:* 2.0.1
 - *Authors:* Benjamin Winkel, Marta Bautista, Federico Di Vruno,
   Gyula I. G. Józsa
 - *User manual:* `stable <https://bwinkel.github.io/pycraf/gui/>`__ |
