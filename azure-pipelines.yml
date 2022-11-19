@@ -32,7 +32,7 @@ jobs:
     pytest.version: ''
     # qt.version: '>=5.9'
     # pytestqt.version: '<4'
-    qt.version: ''
+    pyqt.version: ''
     pytestqt.version: ''
 
   strategy:
@@ -41,41 +41,36 @@ jobs:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
         py_whl: cp38-
-        astropy.version: '4'
+        astropy.version: ''
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
         # tarball should only be published by one thread, as it is version-
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-      # linux39:
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.9'
-      #   py_whl: cp39-
-      # linux310:
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.10'
-      #   py_whl: cp310-
-      # mac38:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.8'
-      #   astropy.version: '4'
-      # mac39:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.9'
-      # mac310:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.10'
-      # win38:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.8'
-      #   astropy.version: '4'
-      # win39:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.9'
-      # win310:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.10'
+      linux39:
+        imageName: 'ubuntu-latest'
+        python.version: '3.9'
+        py_whl: cp39-
+        numpy.version: '1.20.0'
+      linux310:
+        imageName: 'ubuntu-latest'
+        python.version: '3.10'
+        py_whl: cp310-
+        numpy.version: '1.22.0'
+      win38:
+        imageName: 'windows-latest'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: ''
+      win39:
+        imageName: 'windows-latest'
+        python.version: '3.9'
+        numpy.version: '1.20.0'
+      win310:
+        imageName: 'windows-latest'
+        python.version: '3.10'
+        numpy.version: '1.22.0'
 
   pool:
     vmImage: $(imageName)
@@ -148,7 +143,8 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      pip install -e .
+      # pip install -e .
+      python -m pip install --no-build-isolation --no-deps -v -v -v -e .
     displayName: Building
 
   - script: |
@@ -157,46 +153,14 @@ jobs:
     displayName: Testing package
     condition: succeeded()
 
-
   - task: TwineAuthenticate@1
     inputs:
-      pythonUploadServiceConnection: pypi
+      pythonUploadServiceConnection: pypi_pycraf_gui
     displayName: 'Twine Authenticate'
-
-  # wheels not necessary (package is non-binary aka noarch)
-  # - bash: |
-  #     rm -rf build
-  #     docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
-  #     ls -lh wheelhouse/
-  #     mkdir -p dist
-  #     cp wheelhouse/$(package_name)*.whl dist/.
-  #     ls dist
-  #   displayName: Build wheels, Linux
-  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
-
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     python setup.py bdist_wheel
-  #   displayName: Build wheels, MacOS/Windows
-  #   condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
 
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.8'
-
-  # - script: |
-  #     pip install twine
-  #     ls dist/*.whl
-  #     python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
-  #   displayName: Upload wheels, Linux/MacOS
-  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
-
-  # - script: |
-  #     pip install twine
-  #     ls dist/*.whl
-  #     python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
-  #   displayName: Upload wheels, Windows
-  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
+      versionSpec: '3.9'
 
   - script: |
       $(conda.activate) pycraf-env
@@ -208,6 +172,6 @@ jobs:
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
       pip install twine
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi_pycraf_gui" --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
