@@ -189,6 +189,7 @@ class PlotWidget(QtWidgets.QWidget):
         self.setLayout(vbox)
 
     def set_shared(self, sharex, sharey):
+        '''Must only be called at plot creation time.'''
 
         if self.sharex == sharex and self.sharey == sharey:
 
@@ -200,18 +201,26 @@ class PlotWidget(QtWidgets.QWidget):
         if self.numplots > 1:
 
             if self.sharex:
-                self._axes[0].get_shared_x_axes().join(*self._axes)
+                for ax in self._axes[1:]:
+                    self._axes[0].sharex(ax)
+                # self._axes[0].get_shared_x_axes().join(*self._axes)
                 if self.twinx:
-                    self._twinaxes_x[0].get_shared_x_axes().join(
-                        *self._twinaxes_x
-                        )
+                    # self._twinaxes_x[0].get_shared_x_axes().join(
+                    #     *self._twinaxes_x
+                    #     )
+                    for ax in self._twinaxes_x[1:]:
+                        self._twinaxes_x[0].sharex(ax)
 
             if self.sharey:
-                self._axes[0].get_shared_y_axes().join(*self._axes)
+                for ax in self._axes[1:]:
+                    self._axes[0].sharey(ax)
+                # self._axes[0].get_shared_y_axes().join(*self._axes)
                 if self.twiny:
-                    self._twinaxes_y[0].get_shared_y_axes().join(
-                        *self._twinaxes_y
-                        )
+                    # self._twinaxes_y[0].get_shared_y_axes().join(
+                    #     *self._twinaxes_y
+                    #     )
+                    for ax in self._twinaxes_y[1:]:
+                        self._twinaxes_y[0].sharey(ax)
 
     @QtCore.pyqtProperty(object)
     def axes(self):
