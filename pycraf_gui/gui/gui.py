@@ -632,6 +632,7 @@ class PycrafGui(QtWidgets.QMainWindow):
             for ax in axes:
                 ax.clear()
             print('len(axes)', len(axes))
+            fig.clear()
         except TypeError:
             axes.clear()
             fig.clear()
